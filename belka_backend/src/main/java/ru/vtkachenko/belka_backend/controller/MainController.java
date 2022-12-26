@@ -9,6 +9,7 @@ import ru.vtkachenko.belka_backend.controller.payload.OrderRequest;
 import ru.vtkachenko.belka_backend.controller.payload.OrderResponse;
 import ru.vtkachenko.belka_backend.entity.Order;
 import ru.vtkachenko.belka_backend.service.OrderService;
+import ru.vtkachenko.belka_backend.service.SummaryOrder;
 
 import java.util.List;
 
@@ -33,10 +34,10 @@ public class MainController {
         return ResponseEntity.ok("HELLO");
     }
 
-    @GetMapping("/orders/{month}/{year}")
+    @GetMapping("/orders/{year}/{month}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<List<OrderResponse>> getOrdersByMonthAndYear(@PathVariable("month") Integer month,
-                                                                        @PathVariable("year") Integer year) {
+    public ResponseEntity<List<OrderResponse>> getOrdersByMonthAndYear(@PathVariable("year") Integer year,
+                                                                       @PathVariable("month") Integer month) {
         List<Order> ordersByMonthAndYear = orderService.getOrdersByMonthAndYear(month, year);
 
         return ResponseEntity.ok(ordersByMonthAndYear.stream()
@@ -53,6 +54,16 @@ public class MainController {
                 .toList();
 
          return ResponseEntity.ok(orderResponses);
+    }
+
+    @GetMapping("/reports/{year}/{month}")
+    public void getReport(@PathVariable("year") Integer year,
+                          @PathVariable("month") Integer month) {
+        SummaryOrder summaryOrder = new SummaryOrder();
+
+        orderService.getOrdersByMonthAndYear(month, year).forEach(summaryOrder::pushItem);
+
+
     }
 
 
