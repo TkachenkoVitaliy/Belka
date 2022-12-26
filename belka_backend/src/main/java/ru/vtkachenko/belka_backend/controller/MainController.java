@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.vtkachenko.belka_backend.controller.payload.OrderMapper;
-import ru.vtkachenko.belka_backend.controller.payload.OrderRequest;
-import ru.vtkachenko.belka_backend.controller.payload.OrderResponse;
+import ru.vtkachenko.belka_backend.controller.payload.*;
 import ru.vtkachenko.belka_backend.entity.Order;
 import ru.vtkachenko.belka_backend.service.OrderService;
+import ru.vtkachenko.belka_backend.service.ReportService;
 import ru.vtkachenko.belka_backend.service.SummaryOrder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -20,11 +20,13 @@ public class MainController {
 
     private final OrderService orderService;
     private final OrderMapper orderMapper;
+    private final ReportService reportService;
 
     @Autowired
-    public MainController(OrderService orderService, OrderMapper orderMapper) {
+    public MainController(OrderService orderService, OrderMapper orderMapper, ReportService reportService) {
         this.orderService = orderService;
         this.orderMapper = orderMapper;
+        this.reportService = reportService;
     }
 
     @GetMapping("/test")
@@ -57,14 +59,18 @@ public class MainController {
     }
 
     @GetMapping("/reports/{year}/{month}")
-    public void getReport(@PathVariable("year") Integer year,
+    public ResponseEntity<ReportResponse> getReport(@PathVariable("year") Integer year,
                           @PathVariable("month") Integer month) {
-        SummaryOrder summaryOrder = new SummaryOrder();
 
-        orderService.getOrdersByMonthAndYear(month, year).forEach(summaryOrder::pushItem);
+        List<Order> orders = orderService.getOrdersByMonthAndYear(month, year);
 
+        // Ответ с пустым списком
+        if (orders.isEmpty()) {
+            return ResponseEntity.ok(new ReportResponse(LocalDateTime.now()));
+        }
 
+        List<ReportElement> reportElements = reportService.calculateReport(orders);
+
+       return ResponseEntity.ok(new ReportResponse(reportElements, LocalDateTime.now()));
     }
-
-
 }
