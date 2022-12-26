@@ -1,15 +1,8 @@
-import axios from 'axios'
+import axiosInstance from './api'
 import TokenService from './token.service'
 import EventBus from './EventBus'
 
-const instance = axios.create({
-    baseURL: 'http://localhost:8081',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-})
-
-instance.interceptors.request.use(
+const requestInterceptor = axiosInstance.interceptors.request.use(
     (config) => {
         const accessToken = TokenService.getLocalAccessToken()
         if (accessToken) {
@@ -22,7 +15,7 @@ instance.interceptors.request.use(
     }
 )
 
-instance.interceptors.response.use(
+const responseInterceptor = axiosInstance.interceptors.response.use(
     (res) => {
         return res
     },
@@ -34,7 +27,7 @@ instance.interceptors.response.use(
                 originalConfig._retry = true
 
                 try {
-                    const rs = await instance.post('/auth/refreshtoken', {
+                    const rs = await axiosInstance.post('/auth/refreshtoken', {
                         refreshToken: TokenService.getLocalRefreshToken(),
                     })
 
@@ -42,7 +35,7 @@ instance.interceptors.response.use(
 
                     TokenService.updateLocalAcessToken(accessToken)
 
-                    return instance(originalConfig)
+                    return axiosInstance(originalConfig)
                 } catch (_error) {
                     return Promise.reject(_error)
                 }
@@ -57,4 +50,4 @@ instance.interceptors.response.use(
     }
 )
 
-export default instance
+export default setup
