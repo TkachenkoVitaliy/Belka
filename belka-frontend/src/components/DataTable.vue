@@ -25,8 +25,16 @@ import 'handsontable/dist/handsontable.full.css'
 
 registerAllModules()
 
-function validator(value, callback) {
+function numbersValidator(value, callback) {
     if ((value > 0 && value < 100) || value === '' || value == null) {
+        callback(true)
+    } else {
+        callback(false)
+    }
+}
+
+function requiredValidator(value, callback) {
+    if (value && value.length > 0 && value !== '') {
         callback(true)
     } else {
         callback(false)
@@ -38,15 +46,30 @@ export default {
 
     data() {
         return {
-            windowWidth: window.innerWidth * -300,
+            windowWidth: window.innerWidth - 300,
 
-            tableData: [['', null, null, null, null, null]],
+            tableData: [
+                {
+                    id: null,
+                    year: null,
+                    month: null,
+                    name: '',
+                    ferrum: null,
+                    silicium: null,
+                    aluminium: null,
+                    calcium: null,
+                    sulfur: null,
+                },
+            ],
 
             settings: {
                 width: '100%',
-                colWidths: [400, 100, 250, 250, 250, 250],
-                maxCols: 6,
+                colWidths: [0, 0, 0, 400, 100, 250, 250, 250, 250],
+                maxCols: 9,
                 colHeaders: [
+                    'id',
+                    'year',
+                    'month',
                     'Наименование',
                     'Fe %',
                     'Si %',
@@ -56,26 +79,46 @@ export default {
                 ],
 
                 columns: [
-                    { type: 'text' },
-                    { type: 'numeric', validator },
-                    { type: 'numeric', validator },
-                    { type: 'numeric', validator },
-                    { type: 'numeric', validator },
-                    { type: 'numeric', validator },
+                    { type: 'numeric' },
+                    { type: 'numeric' },
+                    { type: 'numeric' },
+                    { type: 'text', requiredValidator },
+                    { type: 'numeric', numbersValidator },
+                    { type: 'numeric', numbersValidator },
+                    { type: 'numeric', numbersValidator },
+                    { type: 'numeric', numbersValidator },
+                    { type: 'numeric', numbersValidator },
                 ],
+
+                hiddenColumns: {
+                    columns: [0, 1, 2],
+                },
             },
         }
     },
 
     methods: {
         addRow() {
-            this.tableData.push(['', null, null, null, null, null])
+            this.tableData.push({
+                id: null,
+                year: null,
+                month: null,
+                name: '',
+                ferrum: null,
+                silicium: null,
+                aluminium: null,
+                calcium: null,
+                sulfur: null,
+            })
         },
     },
 
     mounted() {
         this.$nextTick(() => {
             this.settings.colWidths = [
+                0,
+                0,
+                0,
                 this.windowWidth * 0.25,
                 this.windowWidth * 0.15,
                 this.windowWidth * 0.15,

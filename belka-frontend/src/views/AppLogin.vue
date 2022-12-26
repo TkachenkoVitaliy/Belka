@@ -15,7 +15,7 @@
             <div class="login_title">Авторизуйтесь в системе</div>
             <form name="login_form">
                 <auth-input
-                    v-model="login"
+                    v-model="username"
                     type="text"
                     label="Имя пользователя"
                 />
@@ -23,7 +23,7 @@
                 <div class="btn_container">
                     <button
                         class="login_btn"
-                        @click="sendRequest"
+                        @click="loginRequest"
                         :disabled="buttonDisabled"
                     >
                         Войти
@@ -43,13 +43,14 @@
 
 <script>
 import AuthInput from '@/components/auth/AuthInput.vue'
+import AuthService from '@/services/auth.service'
 
 export default {
     components: { AuthInput },
 
     data() {
         return {
-            login: null,
+            username: null,
             password: null,
             invalidUser: false,
             failedLogin: false,
@@ -58,16 +59,20 @@ export default {
 
     computed: {
         buttonDisabled() {
-            console.log(!!this.login && !!this.password)
-            return !this.login || !this.password
+            return !this.username || !this.password
         },
     },
 
     methods: {
-        sendRequest() {
+        loginRequest() {
             if (!this.buttonDisabled) {
-                console.log(this.login)
-                console.log(this.password)
+                AuthService.login({
+                    username: this.username,
+                    password: this.password,
+                }).then((response) => {
+                    console.log('^^', response)
+                })
+
                 // TODO add auth request
                 this.invalidUser = true
                 this.password = ''
