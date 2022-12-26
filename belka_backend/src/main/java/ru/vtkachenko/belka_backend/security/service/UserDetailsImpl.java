@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -43,18 +44,11 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 authorities);
 
-        System.out.println(userDetails.getId());
-        System.out.println(userDetails.getUsername());
-        System.out.println(userDetails.getPassword());
-        System.out.println(userDetails.getAuthorities());
-
         return userDetails;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println("Get Authorities");
-        System.out.println(authorities);
         return authorities;
     }
 
