@@ -1,8 +1,8 @@
 <template>
     <div class="actionbar">
-        <date-select class="action"></date-select>
+        <date-select class="action" v-if="actions.datePicker"></date-select>
         <hr class="delimiter" />
-        <rows-button class="action"></rows-button>
+        <rows-button class="action" v-if="actions.rowsControl"></rows-button>
     </div>
 </template>
 
@@ -12,6 +12,22 @@ import RowsButton from '@/components/main/RowsButton.vue'
 
 export default {
     components: { DateSelect, RowsButton },
+
+    data() {
+        return {
+            actions: null,
+        }
+    },
+
+    watch: {
+        '$route.path'() {
+            this.actions = this.$route.meta.actions
+        },
+    },
+
+    created() {
+        this.actions = this.$route.meta.actions
+    },
 }
 </script>
 

@@ -3,10 +3,10 @@
         <nav-bar class="navbar_container"></nav-bar>
         <div class="main_app_container">
             <action-bar
-                v-if="$route.fullPath !== '/'"
+                v-if="$route.meta.actions"
                 class="actionbar_container"
             ></action-bar>
-            <div class="bis_container">
+            <div class="content_container">
                 <slot />
             </div>
         </div>
@@ -15,16 +15,29 @@
 <script>
 import NavBar from '@/components/main/NavBar.vue'
 import ActionBar from '@/components/main/ActionBar.vue'
+import EventBus from '@/services/EventBus'
+
 export default {
     components: { NavBar, ActionBar },
 
+    data() {
+        return {
+            settings: null,
+        }
+    },
+
+    methods: {
+        test(val) {
+            console.log(val)
+        },
+    },
+
     mounted() {
-        console.log('MainLayout mounted')
-        console.log(this.$route)
+        EventBus.on('dirty', this.test)
     },
 
     beforeUmnount() {
-        console.log('MainLayout unmounted')
+        EventBus.remove('dirty', this.test)
     },
 }
 </script>
@@ -55,7 +68,7 @@ export default {
     min-width: calc(100vw - 200px);
 }
 
-.bis_container {
+.content_container {
     padding: 20px 50px;
 }
 </style>

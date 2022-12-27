@@ -35,9 +35,11 @@ export default {
     computed: {
         value: {
             get() {
+                console.log('computedGet')
                 return this.modelValue
             },
             set(value) {
+                console.log('computedSet')
                 this.$emit('update:modelValue', value)
             },
         },

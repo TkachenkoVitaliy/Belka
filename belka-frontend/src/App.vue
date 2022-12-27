@@ -20,9 +20,7 @@ export default {
     },
 
     mounted() {
-        EventBus.on('logout', () => {
-            this.logout
-        })
+        EventBus.on('logout', this.logout)
 
         const user = TokenService.getUser()
 

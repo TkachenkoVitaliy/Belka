@@ -2,7 +2,7 @@ import api from './api'
 
 class RestService {
     getOrders(month, year) {
-        return api.get(`/api/orders/{year}/{month}`)
+        return api.get(`/api/orders/${year}/${month}`)
     }
 
     postOrders(orders) {
@@ -10,7 +10,7 @@ class RestService {
     }
 
     getReports(month, year) {
-        return api.get(`/api/orders/{year}/{month}`)
+        return api.get(`/api/orders/${year}/${month}`)
     }
 }
 

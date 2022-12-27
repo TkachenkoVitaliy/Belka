@@ -25,6 +25,11 @@ const routes = [
         meta: {
             layout: 'MainLayout',
             id: 1,
+            actions: {
+                datePicker: true,
+                rowsControl: true,
+                saveButton: true,
+            },
         },
     },
     {
@@ -34,6 +39,9 @@ const routes = [
         meta: {
             layout: 'MainLayout',
             id: 2,
+            actions: {
+                datePicker: true,
+            },
         },
     },
 ]
