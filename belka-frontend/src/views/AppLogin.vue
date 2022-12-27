@@ -69,15 +69,25 @@ export default {
                 AuthService.login({
                     username: this.username,
                     password: this.password,
-                }).then((response) => {
-                    console.log('^^', response)
                 })
-
-                // TODO add auth request
-                this.invalidUser = true
-                this.password = ''
-                this.shake()
+                    .then((response) => {
+                        console.log('!', response)
+                        if (response?.accessToken) {
+                            this.$router.push({ path: '/' }).catch(() => {})
+                        } else {
+                            this.invalidUser = true
+                            this.password = ''
+                            this.shake()
+                        }
+                    })
+                    .catch(() => {
+                        this.invalidUser = true
+                        this.password = ''
+                        this.shake()
+                    })
             }
+
+            this.password = ''
         },
 
         onChangeLogin(validateLogin) {

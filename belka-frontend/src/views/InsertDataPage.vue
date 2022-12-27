@@ -1,17 +1,13 @@
 <template>
     <div>
-        <date-select></date-select>
-    </div>
-    <div>
         <data-table></data-table>
     </div>
 </template>
 
 <script>
-import DataTable from '@/components/DataTable.vue'
-import DateSelect from '@/components/DateSelect.vue'
+import DataTable from '@/components/main/DataTable.vue'
 export default {
-    components: { DataTable, DateSelect },
+    components: { DataTable },
 }
 </script>
 

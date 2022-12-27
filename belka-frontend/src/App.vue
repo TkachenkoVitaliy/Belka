@@ -7,6 +7,7 @@
 <script>
 import EventBus from '@/services/EventBus'
 import AppLayout from './layouts/AppLayout.vue'
+import TokenService from './services/token.service'
 
 export default {
     components: { AppLayout },
@@ -22,6 +23,13 @@ export default {
         EventBus.on('logout', () => {
             this.logout
         })
+
+        const user = TokenService.getUser()
+
+        if (!user || !user.accessToken) {
+            localStorage.removeItem('user')
+            this.$router.push('/auth').catch(() => {})
+        }
     },
 }
 </script>

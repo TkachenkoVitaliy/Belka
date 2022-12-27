@@ -1,8 +1,14 @@
 <template>
     <div>
-        <select>
-            <option v-bind:key="month.value" v-for="month in months">
+        <select class="date_select">
+            <option v-for="month in months" :key="month.value">
                 {{ month.text }}
+            </option>
+        </select>
+
+        <select class="date_select">
+            <option v-for="year in years" :key="year">
+                {{ year }}
             </option>
         </select>
     </div>
@@ -36,14 +42,22 @@ export default {
         }
     },
 
-    mounted() {
+    beforeMount() {
         const date = new Date(Date.now())
 
         this.currentDate = date
-        this.currentYear = date.getMonth()
-        this.currentMonth = date.getFullYear()
+        this.currentYear = date.getFullYear()
+        this.currentMonth = date.getMonth()
+
+        for (let i = 2020; i <= date.getFullYear(); i++) {
+            this.years.push(i)
+        }
     },
 }
 </script>
 
-<style></style>
+<style>
+.date_select {
+    margin: 0px 10px;
+}
+</style>

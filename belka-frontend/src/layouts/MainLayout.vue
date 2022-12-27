@@ -2,16 +2,25 @@
     <div class="page_container">
         <nav-bar class="navbar_container"></nav-bar>
         <div class="main_app_container">
-            <slot />
+            <action-bar
+                v-if="$route.fullPath !== '/'"
+                class="actionbar_container"
+            ></action-bar>
+            <div class="bis_container">
+                <slot />
+            </div>
         </div>
     </div>
 </template>
 <script>
 import NavBar from '@/components/main/NavBar.vue'
+import ActionBar from '@/components/main/ActionBar.vue'
 export default {
-    components: { NavBar },
+    components: { NavBar, ActionBar },
+
     mounted() {
         console.log('MainLayout mounted')
+        console.log(this.$route)
     },
 
     beforeUmnount() {
@@ -34,8 +43,19 @@ export default {
 }
 
 .main_app_container {
-    padding: 20px 50px;
     display: flex;
     flex-direction: column;
+}
+
+.actionbar_container {
+    position: sticky;
+    top: 0;
+    height: 50px;
+    background-color: #f5f6f9;
+    min-width: calc(100vw - 200px);
+}
+
+.bis_container {
+    padding: 20px 50px;
 }
 </style>
