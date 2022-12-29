@@ -81,6 +81,7 @@ export default {
             }
 
             if (count < 0) {
+                count = -count
                 const maxRowsToRemove =
                     this.dataset.length > count ? count : this.dataset.length
                 for (let i = 0; i < maxRowsToRemove; i++) {
